@@ -1,6 +1,7 @@
 import datetime
 
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler
+from socketserver import TCPServer # Use UnixStreamServer for UNIX sockets
 
 # HTTPRequestHandler class
 class basicHTTPServer_RequestHandler(BaseHTTPRequestHandler):
@@ -27,5 +28,5 @@ if __name__ == "__main__":
     # Server settings
     # Choose port 8080, for port 80, which is normally used for a http server, you need root access
     server_address = ('127.0.0.1', 8081)
-    httpd = HTTPServer(server_address, basicHTTPServer_RequestHandler)
+    httpd = TCPServer(server_address, basicHTTPServer_RequestHandler)
     httpd.serve_forever()
