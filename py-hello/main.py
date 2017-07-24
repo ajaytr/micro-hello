@@ -5,7 +5,7 @@ from http.server import BaseHTTPRequestHandler
 from socketserver import UnixStreamServer  # Use UnixStreamServer for UNIX sockets
 
 # HTTPRequestHandler class
-class BasicTCPServerRequestHandler(BaseHTTPRequestHandler):
+class BasicUDSServerRequestHandler(BaseHTTPRequestHandler):
     # GET
     def do_GET(self):
         # Send response status code
@@ -36,5 +36,5 @@ if __name__ == "__main__":
     print("Starting server at time: " + str(now) + ", at address: " + server_address + "\n")
 
     # Server settings
-    httpd = UnixStreamServer(server_address, BasicTCPServerRequestHandler)
+    httpd = UnixStreamServer(server_address, BasicUDSServerRequestHandler)
     httpd.serve_forever()
