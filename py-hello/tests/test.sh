@@ -1,3 +1,3 @@
 #!/bin/bash
 
-curl http://127.0.0.1:8081
+curl --unix-socket /tmp/py-hello.sock http:/hello

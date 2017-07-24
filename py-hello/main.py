@@ -4,6 +4,19 @@ import os
 from http.server import BaseHTTPRequestHandler
 from socketserver import UnixStreamServer  # Use UnixStreamServer for UNIX sockets
 
+# It is necessary to sub-class UnixStreamServer to turn the client address into
+# a tuple that BaseHTTPRequestHandler expects, else BaseHTTPRequestHandler will fail
+class UDSHTTPServer(UnixStreamServer):
+    def get_request(self):
+        request, client_address = self.socket.accept()
+
+        # BaseHTTPRequestHandler expects a tuple with the client address at index
+        # 0, so we fake one
+        if len(client_address) == 0:
+            client_address = (self.server_address,)
+        return (request, client_address)
+
+
 # HTTPRequestHandler class
 class BasicUDSServerRequestHandler(BaseHTTPRequestHandler):
     # GET
@@ -36,5 +49,5 @@ if __name__ == "__main__":
     print("Starting server at time: " + str(now) + ", at address: " + server_address + "\n")
 
     # Server settings
-    httpd = UnixStreamServer(server_address, BasicUDSServerRequestHandler)
+    httpd = UDSHTTPServer(server_address, BasicUDSServerRequestHandler)
     httpd.serve_forever()
