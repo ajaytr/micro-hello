@@ -1,10 +1,11 @@
 import datetime
+import os
 
 from http.server import BaseHTTPRequestHandler
-from socketserver import TCPServer # Use UnixStreamServer for UNIX sockets
+from socketserver import UnixStreamServer  # Use UnixStreamServer for UNIX sockets
 
 # HTTPRequestHandler class
-class basicHTTPServer_RequestHandler(BaseHTTPRequestHandler):
+class BasicTCPServerRequestHandler(BaseHTTPRequestHandler):
     # GET
     def do_GET(self):
         # Send response status code
@@ -23,10 +24,17 @@ class basicHTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     now = datetime.datetime.now()
-    print ("Starting server at time: " + str(now) + "\n")
+    server_address = '/tmp/py-hello.sock'
+
+    # First remove the socket file if it already exists
+    try:
+        os.unlink(server_address)
+    except OSError:
+        if os.path.exists(server_address):
+            raise
+
+    print("Starting server at time: " + str(now) + ", at address: " + server_address + "\n")
 
     # Server settings
-    # Choose port 8080, for port 80, which is normally used for a http server, you need root access
-    server_address = ('127.0.0.1', 8081)
-    httpd = TCPServer(server_address, basicHTTPServer_RequestHandler)
+    httpd = UnixStreamServer(server_address, BasicTCPServerRequestHandler)
     httpd.serve_forever()
