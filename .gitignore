@@ -1,2 +1,3 @@
 go-hello/go-hello
 **/*.pyc
+logs
