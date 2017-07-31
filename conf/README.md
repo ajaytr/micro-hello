@@ -6,7 +6,7 @@ First stop your existing nginx daemon:
 
 Then restart using this conf file:
 
-    nginx -t -c ./nginx-hello.conf
+    nginx -c ./nginx-hello.conf
     
 **Note:** Your .sock files _MUST_ have write
 permissions or be in the same user-group as nginx
